@@ -1,42 +1,47 @@
-from fastapi import APIRouter,Depends,HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from utils.hashing import Hashing
 from utils.token import Token
 
+from sqlalchemy.orm import Session
 
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlmodel import Session
-from config.database import engine
+from config.database import get_db
 from .authschema import RegisterUser
-from  database.models.users import Users
+from database.models.users import User
+from datetime import datetime
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
 
 @router.get("/hello")
 async def hello():
     return "Hello"
 
+
 @router.post("/register")
-async def register(request: RegisterUser):
-    db = Session(engine)
-    db_user = Users(
+async def register(request: RegisterUser, db: Session = Depends(get_db)):
+
+    db_user = User(
         name=request.name,
         email=request.email,
-        password=Hashing.create_hash(request.password)
+        password=Hashing.create_hash(request.password),
     )
 
     db.add(db_user)
     db.commit()
+    db.refresh(db_user)
 
+    return Response(
+        content="Berhasil membuat user", status_code=status.HTTP_201_CREATED
+    )
 
-    return Response(content="Berhasil membuat user", status_code=status.HTTP_201_CREATED)
-
-    
 
 @router.post("/login")
-async def login(request: OAuth2PasswordRequestForm = Depends()):
-    db = Session(engine)
+async def login(
+    request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+):
 
-    user = db.query(Users).filter(Users.email == request.username).first()
+    user = db.query(User).filter(User.email == request.username).first()
 
     if not user:
         raise HTTPException(
@@ -59,18 +64,16 @@ async def login(request: OAuth2PasswordRequestForm = Depends()):
 
 
 @router.get("/getuser")
-async def getUser(token: str = Depends(Token.get_currentUser)):
-    db = Session(engine)
-    user = db.query(Users).filter(Users.email == token).first()
+async def getUser(
+    token: str = Depends(Token.get_currentUser), db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(User.email == token).first()
 
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Invalid Credentials"
         )
 
-    response = {
-        "name": user.name,
-        "email": user.email
-    }
+    response = {"name": user.name, "email": user.email}
 
     return response

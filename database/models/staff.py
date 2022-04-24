@@ -1,12 +1,14 @@
-from typing import Optional
-from sqlmodel import SQLModel, Field
-from sqlmodel.main import Relationship
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
+from config.database import Base
 
-from models.admin import Admin
 
+class StaffModel(Base):
+    __tablename__ = "staff"
 
-class Staff(SQLModel, table=True):
-    id: Optional[int] = Field(index=True, primary_key=True)
-    course_id: Optional[int] = Field(default=True, foreign_key="course.id")
-    admin_id: Optional[int] = Field(default=True, foreign_key="admin.id")
-    admin: Optional[Admin] = Relationship(back_populates="admin")
+    id = Column(Integer, primary_key=True)
+    admin_id = Column(Integer, ForeignKey("admin.id"))
+    admin = relationship("User", uselist=False)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())

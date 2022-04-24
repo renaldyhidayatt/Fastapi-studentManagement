@@ -1,14 +1,14 @@
-from typing import TYPE_CHECKING, Optional
-from sqlmodel import SQLModel
-from sqlmodel.main import Field, Relationship
-from .users import User
-
-if TYPE_CHECKING:
-    from .staff import Staff
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+from config.database import Base
 
 
-class Admin(SQLModel, table=True):
-    id: Optional[int] = Field(primary_key=True, index=True)
-    users_id: Optional[int] = Field(default=True, foreign_key="user.id")
-    users: Optional[User] = Relationship(back_populates="admin")
-    admin: Optional["Staff"] = Relationship(back_populates="admin")
+class Admin(Base):
+    __tablename__ = "admin"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user = relationship("User", uselist=False)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, onupdate=func.now())

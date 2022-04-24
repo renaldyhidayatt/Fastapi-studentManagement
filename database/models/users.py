@@ -1,18 +1,15 @@
-from typing import TYPE_CHECKING, Optional, List
-from sqlmodel import SQLModel, Field, Relationship
-
-from sqlalchemy import Column, String
-
-if TYPE_CHECKING:
-    from .admin import Admin
+from tkinter.tix import Tree
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql import func
+from config.database import Base
 
 
-class User(SQLModel, table=True):
-    id: Optional[int] = Field(index=True, primary_key=True)
-    name: str
-    email: str = Field(sa_column=Column("email", String, unique=True))
-    password: str
-    image: Optional[str] = Field(default=None)
-    created_at: Optional[str] = Field(index=True)
-    updated_at: Optional[str] = Field(index=True)
-    admin: List["Admin"] = Relationship(back_populates="users")
+class User(Base):
+    __tablename__ = "user"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String)
+    email = Column(String, unique=True)
+    password = Column(String)
+    image = Column(String, default="default.jpg")
+    time_created = Column(DateTime(timezone=True), default=func.now())
+    time_updated = Column(DateTime(timezone=True), onupdate=func.now())

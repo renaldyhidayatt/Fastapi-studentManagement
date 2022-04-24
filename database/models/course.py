@@ -1,9 +1,11 @@
-from typing import Optional
-from sqlmodel import SQLModel, Field
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql import func
+from config.database import Base
 
 
-class Course(SQLModel, table=True):
-    id: Optional[int] = Field(primary_key=True, index=True)
-    name: str
-    created_at: Optional[str] = Field(default=None)
-    updated_at: Optional[str] = Field(default=None)
+class Course(Base):
+    __tablename__ = "course"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())

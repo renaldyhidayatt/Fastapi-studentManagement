@@ -1,15 +1,16 @@
-from typing import Optional
-from sqlalchemy.sql.expression import table
-from sqlmodel import SQLModel
-from sqlmodel.main import Field
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
+from config.database import Base
 
 
-class Student(SQLModel, table=True):
-    """
-    Student model
+class Student(Base):
+    __tablename__ = "student"
 
-    """
-
-    # admin_id =
-    # admin =
-    course: Optional[int] = Field(foreign_key="course.id", default=None)
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user = relationship("User", uselist=False)
+    course_id = Column(Integer, ForeignKey("course.id"))
+    course = relationship("Course", uselist=False)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
