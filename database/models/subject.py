@@ -11,4 +11,4 @@ class Subject(Base):
     staff = Column(Integer, ForeignKey("staff.id"))
     course = Column(Integer, ForeignKey("course.id"))
     created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    updated_at = Column(DateTime, onupdate=func.now())

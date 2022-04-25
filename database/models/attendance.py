@@ -10,4 +10,4 @@ class Attendance(Base):
     student_id = Column(Integer, ForeignKey("student.id"))
     course_id = Column(Integer, ForeignKey("course.id"))
     date = Column(DateTime, default=func.now())
-    status = Column(String)
+    status = Column(String, default="hadir")

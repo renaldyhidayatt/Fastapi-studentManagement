@@ -12,6 +12,7 @@ passlib = "*"
 bcrypt = "*"
 python-multipart = "*"
 sqlalchemy = "*"
+alembic = "*"
 
 [dev-packages]
 black = "*"

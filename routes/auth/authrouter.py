@@ -8,7 +8,6 @@ from fastapi.security import OAuth2PasswordRequestForm
 from config.database import get_db
 from .authschema import RegisterUser
 from database.models.users import User
-from datetime import datetime
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 

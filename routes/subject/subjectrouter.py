@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 
-
 from sqlalchemy.orm import Session
 from config.database import get_db
-from database.models.staff import Staff
-from .staffschema import StaffSchema
+from database.models.subject import Subject
+from .subjectschema import SubjectSchema
 
-router = APIRouter(prefix="/staff", tags=["Staff"])
+
+router = APIRouter(prefix="/subject", tags=["Subject"])
 
 
 @router.get("/hello")
@@ -15,13 +15,14 @@ async def hello():
 
 
 @router.post("/")
-async def create(request: StaffSchema, db: Session = Depends(get_db)):
-    db_staff = Staff(
-        user_id=request.user_id,
+async def create(request: SubjectSchema, db: Session = Depends(get_db)):
+    db_subject = Subject(
+        name=request.name,
+        staff=request.staff_id,
         course=request.course_id,
     )
 
-    db.add(db_staff)
+    db.add(db_subject)
 
     db.commit()
 
