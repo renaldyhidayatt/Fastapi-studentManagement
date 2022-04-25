@@ -9,6 +9,7 @@ from routes.staff import staffrouter
 from routes.attendance import attendancerouter
 from routes.fbstudent import fbstudentrouter
 from routes.fbstaff import fbstaffrouter
+from database.seed.main import admincreate
 
 from config.database import Base, engine
 
@@ -18,6 +19,11 @@ app = FastAPI()
 @app.on_event("startup")
 async def runtimestartup():
     Base.metadata.create_all(bind=engine)
+
+
+@app.on_event("startup")
+async def runtimeseed():
+    admincreate()
 
 
 @app.get("/")

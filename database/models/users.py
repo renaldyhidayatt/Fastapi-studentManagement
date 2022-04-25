@@ -11,5 +11,5 @@ class User(Base):
     email = Column(String, unique=True)
     password = Column(String)
     image = Column(String, default="default.jpg")
-    time_created = Column(DateTime(timezone=True), default=func.now())
-    time_updated = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(DateTime(timezone=True), default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())

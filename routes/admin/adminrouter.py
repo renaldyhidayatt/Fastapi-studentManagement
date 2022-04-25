@@ -10,7 +10,7 @@ router = APIRouter(prefix="/admin", tags=["Admin"])
 
 @router.get("/hello")
 async def hello():
-    return "Hello"
+    return {"msg": "Hello World"}
 
 
 @router.post("/")
