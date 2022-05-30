@@ -1,8 +1,8 @@
 run:
-	python main.py
+	python app/main.py
 
 seed:
-	python seed.py
+	python app/database/seed.py
 
 test:
-	python test.py
+	pytest test.py
