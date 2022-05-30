@@ -17,7 +17,11 @@ from app.database.seed.main import admincreate
 
 from app.config.database import Base, engine
 
-app = FastAPI()
+app = FastAPI(
+    title="API for Student Management",
+    description="This is a API for Student Management",
+    version="1.0.0",
+)
 
 
 @app.on_event("startup")

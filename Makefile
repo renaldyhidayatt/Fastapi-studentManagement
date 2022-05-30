@@ -5,4 +5,4 @@ seed:
 	python app/database/seed.py
 
 test:
-	pytest test.py
+	pytest tests/test.py

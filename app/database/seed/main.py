@@ -10,3 +10,7 @@ def admincreate():
     db.commit()
     db.refresh(db_admin)
     return db_admin
+
+
+if __name__ == "__main__":
+    admincreate()
